@@ -10,6 +10,7 @@ import { Category } from "./category.model";
 @Injectable({
   providedIn: 'root'
 })
+
 export class CategoryService {
 
   private apiPath: string = "api/categories"
@@ -74,4 +75,5 @@ private handleError(error: any): Observable<any>{
   console.log('ERRO NA REQUISIÇÃO => ', error)
   return throwError(error)
   }
+  
 }
