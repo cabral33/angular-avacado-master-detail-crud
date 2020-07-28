@@ -15,6 +15,7 @@ import { threadId } from 'worker_threads';
   templateUrl: './category-form.component.html',
   styleUrls: ['./category-form.component.css']
 })
+
 export class CategoryFormComponent implements OnInit {
 
   currentAction: string
@@ -39,6 +40,15 @@ export class CategoryFormComponent implements OnInit {
 
   ngAfterContentChecked(){
     this.setPageTitle()
+}
+
+public submitForm(){
+  this.submittingForm = true 
+  
+  if (this.currentAction == "new")
+    this.createCategory()
+  else
+    this.updateCategory()
 }
 
 //PRIVATE METHODS
@@ -82,4 +92,39 @@ private loadCategory(){
     }
     
   }
+
+  public createCategory(){
+    const category: Category = Object.assign(new Category(), this.categoryForm.value)
+
+    this.categoryService.create(category)
+    .subscribe(
+      category => this.actionsForSuccess(category),
+      error => this.actionsForError(error)
+    )
+  }
+
+  private updateCategory(){
+
+  }
+
+  private actionsForSuccess(category: Category){
+    toastr.success("Solicitação processada")
+
+    this.router.navigateByUrl("categories", {skipLocationChange: true}).then(
+      () => this.router.navigate(['categories', category.id, "edit"])
+    )
+  }
+
+  private actionsForError(error){
+    toastr.error("Ocorreu um erro ao processar a sua solicitação")
+
+    this.submittingForm = false
+
+    if (error.status === 422)
+      this.serverErrorMessages = JSON.parse(error._body).error
+    else
+      this.serverErrorMessages = ['Falha na Comunicação!!!!!!']
+  }
+
+
 }
