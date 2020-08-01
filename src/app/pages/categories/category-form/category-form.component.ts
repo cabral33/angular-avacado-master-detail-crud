@@ -18,7 +18,7 @@ import { threadId } from 'worker_threads';
 
 export class CategoryFormComponent implements OnInit {
 
-  currentAction: string
+  currentAction: string = ''
   categoryForm: FormGroup
   pageTitle: string
   serverErrorMessages: string[] = null
@@ -42,7 +42,7 @@ export class CategoryFormComponent implements OnInit {
     this.setPageTitle()
 }
 
-public submitForm(){
+submitForm(){
   this.submittingForm = true 
   
   if (this.currentAction == "new")
@@ -57,7 +57,7 @@ private setCurrentAction(){
   if (  this.route.snapshot.url[0].path == 'new')
     this.currentAction = 'new'
   else
-  this.currentAction = 'new'
+  this.currentAction = 'edit'
 }
 
 private buildCategoryForm(){
@@ -70,6 +70,7 @@ private buildCategoryForm(){
 
 private loadCategory(){
   if (this.currentAction == 'edit') {
+    
     this.route.paramMap.pipe(
       switchMap(params => this.categoryService.getById(+params.get('id')))
     )
@@ -88,9 +89,8 @@ private loadCategory(){
       this.pageTitle = "Cadastro de nova Categoria"
     else{
       const categoryName = this.category.name || ''
-       this.pageTitle = 'Editando Categorias: ' + categoryName
+      this.pageTitle = 'Editando Categoria: ' + categoryName
     }
-    
   }
 
   public createCategory(){
@@ -104,12 +104,18 @@ private loadCategory(){
   }
 
   private updateCategory(){
+    const category: Category = Object.assign(new Category(), this.categoryForm.value)
 
+    this.categoryService.update(category)
+      .subscribe(
+        category => this.actionsForSuccess(category),
+        error => this.actionsForError(error)
+    )
   }
 
   private actionsForSuccess(category: Category){
     toastr.success("Solicitação processada")
-
+    
     this.router.navigateByUrl("categories", {skipLocationChange: true}).then(
       () => this.router.navigate(['categories', category.id, "edit"])
     )
