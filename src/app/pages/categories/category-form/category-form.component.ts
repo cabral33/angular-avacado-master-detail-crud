@@ -54,7 +54,7 @@ submitForm(){
 //PRIVATE METHODS
 
 private setCurrentAction(){
-  if (  this.route.snapshot.url[0].path == 'new')
+  if (this.route.snapshot.url[0].path == 'new')
     this.currentAction = 'new'
   else
   this.currentAction = 'edit'
@@ -79,7 +79,7 @@ private loadCategory(){
         this.category = category
         this.categoryForm.patchValue(this.category)
       },
-      (error) => alert('Ocorreu um erro meu chará')
+      (error) => alert('Ocorreu um erro, esse endereço não existe')
     )
     }
   }
@@ -114,7 +114,7 @@ private loadCategory(){
   }
 
   private actionsForSuccess(category: Category){
-    toastr.success("Solicitação processada")
+    toastr.success("Categoria criada com sucesso!")
     
     this.router.navigateByUrl("categories", {skipLocationChange: true}).then(
       () => this.router.navigate(['categories', category.id, "edit"])
