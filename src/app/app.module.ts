@@ -6,6 +6,7 @@ import { HttpClientModule } from "@angular/common/http";
 
 import { AppComponent } from './app.component';
 import { CategoriesModule } from './pages/categories/categories.module';
+import { EntriesModule } from "./pages/entries/entries.module";
 
 import { HttpClientInMemoryWebApiModule } from "angular-in-memory-web-api";
 import { InMemoryDatabase } from "./in-memory-database";
@@ -18,6 +19,7 @@ import { InMemoryDatabase } from "./in-memory-database";
     BrowserModule,
     AppRoutingModule,
     CategoriesModule,
+    EntriesModule,
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(InMemoryDatabase)
   ],
