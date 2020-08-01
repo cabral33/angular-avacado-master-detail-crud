@@ -129,7 +129,7 @@ private loadCategory(){
     if (error.status === 422)
       this.serverErrorMessages = JSON.parse(error._body).error
     else
-      this.serverErrorMessages = ['Falha na Comunicação!!!!!!']
+      this.serverErrorMessages = ['Falha na Comunicação tente novamente mais tarde']
   }
 
 
